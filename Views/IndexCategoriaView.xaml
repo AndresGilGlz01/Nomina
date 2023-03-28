@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Nomina.Views.IndexCategoriaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Nomina.Views"
+             xmlns:views="clr-namespace:Nomina.Views.CategoriaViews"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ContentControl>
+        <ContentControl.Resources>
+            <views:AddCategoriaView x:Key="AddCategoria"/>
+            <views:DeleteCategoriaView x:Key="DeleteCategoria"/>
+            <views:CategoriaView x:Key="CategoriaView"/>
+        </ContentControl.Resources>
+        <ContentControl.Style>
+            <Style TargetType="ContentControl">
+                <Setter Property="Content" Value="{StaticResource CategoriaView}"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Operacion}" Value="{x:Static local:Operacion.View}">
+                        <Setter Property="Content" Value="{StaticResource CategoriaView}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Operacion}" Value="{x:Static local:Operacion.Create}">
+                        <Setter Property="Content" Value="{StaticResource AddCategoria}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Operacion}" Value="{x:Static local:Operacion.Delete}">
+                        <Setter Property="Content" Value="{StaticResource DeleteCategoria}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Operacion}" Value="{x:Static local:Operacion.Update}">
+                        <Setter Property="Content" Value="{StaticResource AddCategoria}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ContentControl.Style>
+    </ContentControl>
+</UserControl>
