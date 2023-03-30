@@ -1,14 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Nomina.Models;
+﻿using Nomina.Models;
 using Nomina.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Nomina.Repositories;
 public class CategoriaRepository : IRepository<Categoria>
 {
-    private NominaContext _context = MainViewModel.Context;
+    readonly NominaContext _context = MainViewModel.Context;
 
     public void Add(Categoria entity)
     {
@@ -31,17 +29,6 @@ public class CategoriaRepository : IRepository<Categoria>
 
     public IEnumerable<Categoria> GetAll()
     {
-        //return _context.Categoria;
-        //    .AsNoTracking();
-        var updatedEntities = _context
-            .Categoria
-            .ToList();
-
-        foreach (var entity in updatedEntities)
-        {
-            _context.Entry(entity).Reload();
-        }
-
         return _context.Categoria;
     }
 
@@ -49,7 +36,7 @@ public class CategoriaRepository : IRepository<Categoria>
     {
         return _context
             .Categoria
-            .FirstOrDefault(x => x.Id == id);
+            .FirstOrDefault(x => x.Id == id)!;
     }
 
     public void Update(Categoria entity)

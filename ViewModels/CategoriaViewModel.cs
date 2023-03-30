@@ -12,13 +12,13 @@ namespace Nomina.ViewModels;
 
 public class CategoriaViewModel : IViewModel
 {
-    private CategoriaRepository _repository = new();
-    private Operacion _operacion;
-    private ObservableCollection<Categoria> _categorias = new();
-    private string _errores = string.Empty;
-    private string _error = string.Empty;
-    private Categoria _categoria = new();
-    private Categoria? _categoriatemp;
+    readonly CategoriaRepository _repository = new();
+    Operacion _operacion;
+    ObservableCollection<Categoria> _categorias = new();
+    string _errores = string.Empty;
+    string _error = string.Empty;
+    Categoria _categoria = new();
+    Categoria? _categoriatemp;
 
     public ObservableCollection<Categoria> Categorias
     {
@@ -59,7 +59,7 @@ public class CategoriaViewModel : IViewModel
     public ICommand FiltrarCommand { get; set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-    public Action ActualizarEmpleados { get; set; }
+    public Action? ActualizarEmpleados { get; set; }
 
     public CategoriaViewModel()
     {
@@ -109,7 +109,7 @@ public class CategoriaViewModel : IViewModel
         if (Categoria is not null)
         {
             _repository.Update(Categoria);
-            ActualizarEmpleados();
+            ActualizarEmpleados!();
         }
         else
         {
@@ -127,13 +127,12 @@ public class CategoriaViewModel : IViewModel
 
     private void VerEliminar(int id)
     {
-        Operacion = Operacion.Delete;
         Categoria = _repository.GetById(id);
+        Operacion = Operacion.Delete;
     }
 
     private void VerModificar(int id)
     {
-        Operacion = Operacion.Update;
         Categoria = _repository.GetById(id);
         _categoriatemp = new Categoria()
         {
@@ -142,6 +141,7 @@ public class CategoriaViewModel : IViewModel
             SueldoMaximo = Categoria.SueldoMaximo,
             TotalEmpleados = Categoria.TotalEmpleados,
         };
+        Operacion = Operacion.Update;
     }
 
     public void Actualizar()

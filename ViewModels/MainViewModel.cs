@@ -9,10 +9,14 @@ namespace Nomina.ViewModels;
 public class MainViewModel : INotifyPropertyChanged
 {
     public static NominaContext Context { get; set; } = new();
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public ICommand NavegarEmpleadoCommand { get; set; }
+    public ICommand NavegarCategoriaCommand { get; set; }
 
     public IViewModel ViewModelActual
     {
-        get => _viewmodelactual;
+        get => _viewmodelactual ?? new EmpleadoViewModel();
         set {
             _viewmodelactual = value;
             _viewmodelactual.Actualizar();
@@ -22,18 +26,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     private readonly CategoriaViewModel _categoriaviewmodel = new();
     private readonly EmpleadoViewModel _empleadoviewmodel = new();
-    private IViewModel _viewmodelactual;
-
-
-    private void ActualizarEmpleados()
-    {
-        _empleadoviewmodel.Actualizar();
-    }
-
-    public ICommand NavegarEmpleadoCommand { get; set; }
-    public ICommand NavegarCategoriaCommand { get; set; }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
+    private IViewModel? _viewmodelactual;
 
     public MainViewModel()
     {
@@ -41,16 +34,28 @@ public class MainViewModel : INotifyPropertyChanged
         NavegarCategoriaCommand = new RelayCommand(NavegarCategoria);
         ViewModelActual = _empleadoviewmodel;
         _categoriaviewmodel.ActualizarEmpleados = ActualizarEmpleados;
+        _empleadoviewmodel.ActualizarCategoria = ActualizarCategoria;
     }
 
-    private void NavegarCategoria()
+    void NavegarCategoria()
     {
         ViewModelActual = _categoriaviewmodel;
     }
 
-    private void NavegarEmpleado()
+    void NavegarEmpleado()
     {
         ViewModelActual = _empleadoviewmodel;
+    }
+
+    void ActualizarEmpleados()
+    {
+        _empleadoviewmodel.Actualizar();
+    }
+
+    void ActualizarCategoria(Categoria entity)
+    {
+        Context.Entry(entity).Reload();
+        _categoriaviewmodel.Actualizar();
     }
 
     void Notificar([CallerMemberName] string? propertyName = null)

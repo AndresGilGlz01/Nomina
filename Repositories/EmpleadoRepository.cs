@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
 using Nomina.Models;
 using Nomina.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Nomina.Repositories;
 public class EmpleadoRepository : IRepository<Empleado>
 {
-    private NominaContext _context = MainViewModel.Context;
+    readonly NominaContext _context = MainViewModel.Context;
 
     public void Add(Empleado entity)
     {
@@ -50,7 +48,7 @@ public class EmpleadoRepository : IRepository<Empleado>
     {
         return _context
             .Empleado
-            .FirstOrDefault(emp => emp.Id == id);
+            .FirstOrDefault(emp => emp.Id == id)!;
     }
 
     public void Update(Empleado entity)

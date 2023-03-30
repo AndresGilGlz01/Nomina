@@ -23,12 +23,6 @@
         </UniformGrid>
 
         <UniformGrid Columns="2" Margin="0,10,0,0">
-            <TextBlock Text="Activo: " HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="24"/>
-            <CheckBox IsChecked="{Binding Empleado.Activo}" Foreground="MediumPurple"
-                      HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="24" Margin="0,7,0,0"/>
-        </UniformGrid>
-
-        <UniformGrid Columns="2" Margin="0,10,0,0">
             <TextBlock Text="Categoria: " HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="24"/>
             <ComboBox ItemsSource="{Binding Categorias}" SelectedValue="{Binding Empleado.IdCategoria}" DisplayMemberPath="Nombre" Loaded="ComboBox_Loaded"
                       SelectedValuePath="Id" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="24" Width="300"
@@ -47,8 +41,7 @@
                 </Button.Content>
             </Button>
             <Button BorderThickness="0" Padding="10" Height="55" Cursor="Hand" Margin="5" Width="300"
-                    HorizontalAlignment="Right"
-                    Command="{Binding RegistrarCommand}">
+                    HorizontalAlignment="Right" Loaded="Button_Loaded">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <materialIcons:MaterialIcon Kind="CheckBold" Foreground="MediumPurple" FontSize="24"/>

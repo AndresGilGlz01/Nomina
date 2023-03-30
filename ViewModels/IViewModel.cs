@@ -18,7 +18,7 @@ public interface IViewModel : INotifyPropertyChanged
     ICommand RegresarCommand { get; set; }
     ICommand FiltrarCommand { get; set; }
 
-    event PropertyChangedEventHandler? PropertyChanged;
+    new event PropertyChangedEventHandler PropertyChanged;
 
     void Actualizar();
     void Notificar([CallerMemberName] string? propertyName = null);

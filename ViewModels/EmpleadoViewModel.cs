@@ -76,12 +76,14 @@ public class EmpleadoViewModel : IViewModel
     public ICommand VerRegistrarCommand { get; set; }
     public ICommand VerModificarCommand { get; set; }
     public ICommand VerEliminarCommand { get; set; }
+    public ICommand ModificarCommand { get; set; }
     public ICommand RegistrarCommand { get; set; }
     public ICommand EliminarCommand { get; set; }
     public ICommand RegresarCommand { get; set; }
     public ICommand FiltrarCommand { get; set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
+    public Action<Categoria>? ActualizarCategoria { get; set; }
 
     public EmpleadoViewModel()
     {
@@ -89,11 +91,13 @@ public class EmpleadoViewModel : IViewModel
         VerEliminarCommand = new RelayCommand<int>(VerEliminar);
         VerRegistrarCommand = new RelayCommand(VerRegistrar);
         RegistrarCommand = new RelayCommand(Registrar);
+        ModificarCommand = new RelayCommand(Modificar);
         EliminarCommand = new RelayCommand(Eliminar);
         RegresarCommand = new RelayCommand(Regresar);
         FiltrarCommand = new RelayCommand<string>(Filtrar);
         Actualizar();
     }
+
 
     private void Filtrar(string pattern)
     {
@@ -119,6 +123,18 @@ public class EmpleadoViewModel : IViewModel
         if (Empleado is not null)
         {
             _repository.Delete(Empleado);
+            ActualizarCategoria!(Empleado.IdCategoriaNavigation);
+            Actualizar();
+            Operacion = Operacion.View;
+        }
+    }
+
+    private void Modificar()
+    {
+        Empleado = _repository.GetById(Empleado.Id);
+        if (Empleado is not null)
+        {
+            _repository.Update(Empleado);
             Actualizar();
             Operacion = Operacion.View;
         }
@@ -126,17 +142,8 @@ public class EmpleadoViewModel : IViewModel
 
     private void Registrar()
     {
-        Empleado temp = Empleado;
-        Empleado = _repository.GetById(Empleado.Id);
-
-        if (Empleado is not null)
-        {
-            _repository.Update(Empleado);
-        }
-        else
-        {
-            _repository.Add(temp);
-        }
+        _repository.Add(Empleado);
+        ActualizarCategoria!(Empleado.IdCategoriaNavigation);
         Actualizar();
         Operacion = Operacion.View;
     }

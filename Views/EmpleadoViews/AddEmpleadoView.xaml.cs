@@ -34,5 +34,19 @@ namespace Nomina.Views.EmpleadoViews
                 ((ComboBox)sender).SelectedIndex = 0;
             }
         }
+
+        private void Button_Loaded(object sender, RoutedEventArgs e)
+        {
+            var x = (this.DataContext as EmpleadoViewModel);
+
+            if (x.Operacion == Operacion.Create)
+            {
+                (sender as Button).Command = x.RegistrarCommand;
+            }
+            else if (x.Operacion == Operacion.Update)
+            {
+                (sender as Button).Command = x.ModificarCommand;
+            }
+        }
     }
 }
