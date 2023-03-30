@@ -59,6 +59,7 @@ public class CategoriaViewModel : IViewModel
     public ICommand FiltrarCommand { get; set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
+    public Action ActualizarEmpleados { get; set; }
 
     public CategoriaViewModel()
     {
@@ -108,6 +109,7 @@ public class CategoriaViewModel : IViewModel
         if (Categoria is not null)
         {
             _repository.Update(Categoria);
+            ActualizarEmpleados();
         }
         else
         {

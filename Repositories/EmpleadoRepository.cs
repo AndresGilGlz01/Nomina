@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 using Nomina.Models;
+using Nomina.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Linq;
 namespace Nomina.Repositories;
 public class EmpleadoRepository : IRepository<Empleado>
 {
-    private NominaContext _context = new();
+    private NominaContext _context = MainViewModel.Context;
 
     public void Add(Empleado entity)
     {
@@ -26,14 +27,18 @@ public class EmpleadoRepository : IRepository<Empleado>
 
     public IEnumerable<Empleado> Filter(string pattern)
     {
-        return _context.Empleado
+        return _context
+            .Empleado
             .Where(emp => emp.Nombre.Contains(pattern));
     }
 
     public IEnumerable<Empleado> GetAll()
     {
-        return _context.Empleado
-            .Where(emp => emp.Activo == 1);
+        return _context
+            .Empleado
+            .Where(emp => emp.Activo == 1)
+            .OrderBy(emp => emp.Nombre)
+            .Include(emp => emp.IdCategoriaNavigation);
     }
 
     public IEnumerable<Categoria> GetAllCategorias()
@@ -43,7 +48,8 @@ public class EmpleadoRepository : IRepository<Empleado>
 
     public Empleado GetById(int id)
     {
-        return _context.Empleado
+        return _context
+            .Empleado
             .FirstOrDefault(emp => emp.Id == id);
     }
 

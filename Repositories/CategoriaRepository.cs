@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nomina.Models;
+using Nomina.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Linq;
 namespace Nomina.Repositories;
 public class CategoriaRepository : IRepository<Categoria>
 {
-    private NominaContext _context = new();
+    private NominaContext _context = MainViewModel.Context;
 
     public void Add(Categoria entity)
     {
@@ -23,13 +24,18 @@ public class CategoriaRepository : IRepository<Categoria>
 
     public IEnumerable<Categoria> Filter(string pattern)
     {
-        return _context.Categoria
+        return _context
+            .Categoria
             .Where(cat => cat.Nombre.Contains(pattern));
     }
 
     public IEnumerable<Categoria> GetAll()
     {
-        var updatedEntities = _context.Categoria.ToList();
+        //return _context.Categoria;
+        //    .AsNoTracking();
+        var updatedEntities = _context
+            .Categoria
+            .ToList();
 
         foreach (var entity in updatedEntities)
         {
@@ -41,7 +47,8 @@ public class CategoriaRepository : IRepository<Categoria>
 
     public Categoria GetById(int id)
     {
-        return _context.Categoria
+        return _context
+            .Categoria
             .FirstOrDefault(x => x.Id == id);
     }
 

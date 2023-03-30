@@ -1,4 +1,5 @@
 ﻿using Nomina.Helpers;
+using Nomina.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -7,6 +8,8 @@ namespace Nomina.ViewModels;
 
 public class MainViewModel : INotifyPropertyChanged
 {
+    public static NominaContext Context { get; set; } = new();
+
     public IViewModel ViewModelActual
     {
         get => _viewmodelactual;
@@ -21,6 +24,12 @@ public class MainViewModel : INotifyPropertyChanged
     private readonly EmpleadoViewModel _empleadoviewmodel = new();
     private IViewModel _viewmodelactual;
 
+
+    private void ActualizarEmpleados()
+    {
+        _empleadoviewmodel.Actualizar();
+    }
+
     public ICommand NavegarEmpleadoCommand { get; set; }
     public ICommand NavegarCategoriaCommand { get; set; }
 
@@ -31,6 +40,7 @@ public class MainViewModel : INotifyPropertyChanged
         NavegarEmpleadoCommand = new RelayCommand(NavegarEmpleado);
         NavegarCategoriaCommand = new RelayCommand(NavegarCategoria);
         ViewModelActual = _empleadoviewmodel;
+        _categoriaviewmodel.ActualizarEmpleados = ActualizarEmpleados;
     }
 
     private void NavegarCategoria()
