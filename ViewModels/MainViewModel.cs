@@ -8,25 +8,34 @@ namespace Nomina.ViewModels;
 
 public class MainViewModel : INotifyPropertyChanged
 {
-    public static NominaContext Context { get; set; } = new();
-    public event PropertyChangedEventHandler? PropertyChanged;
+    #region fields
+    private readonly CategoriaViewModel _categoriaviewmodel = new(Context);
+    private readonly EmpleadoViewModel _empleadoviewmodel = new(Context);
+    private IViewModel? _viewmodelactual;
+    #endregion
 
-    public ICommand NavegarEmpleadoCommand { get; set; }
-    public ICommand NavegarCategoriaCommand { get; set; }
+    #region properties
+    public static NominaContext Context { get; set; } = new();
 
     public IViewModel ViewModelActual
     {
-        get => _viewmodelactual ?? new EmpleadoViewModel();
+        get => _viewmodelactual ?? new EmpleadoViewModel(Context);
         set {
             _viewmodelactual = value;
             _viewmodelactual.Actualizar();
             Notificar();
         }
     }
+    #endregion
 
-    private readonly CategoriaViewModel _categoriaviewmodel = new();
-    private readonly EmpleadoViewModel _empleadoviewmodel = new();
-    private IViewModel? _viewmodelactual;
+    #region commands
+    public ICommand NavegarEmpleadoCommand { get; set; }
+    public ICommand NavegarCategoriaCommand { get; set; }
+    #endregion
+
+    #region events
+    public event PropertyChangedEventHandler? PropertyChanged;
+    #endregion
 
     public MainViewModel()
     {
@@ -37,6 +46,7 @@ public class MainViewModel : INotifyPropertyChanged
         _empleadoviewmodel.ActualizarCategoria = ActualizarCategoria;
     }
 
+    #region methods
     void NavegarCategoria()
     {
         ViewModelActual = _categoriaviewmodel;
@@ -62,4 +72,5 @@ public class MainViewModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+    #endregion
 }

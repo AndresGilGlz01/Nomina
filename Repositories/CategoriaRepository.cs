@@ -6,7 +6,12 @@ using System.Linq;
 namespace Nomina.Repositories;
 public class CategoriaRepository : IRepository<Categoria>
 {
-    readonly NominaContext _context = MainViewModel.Context;
+    private NominaContext _context;
+
+    public CategoriaRepository(NominaContext context)
+    {
+        _context = context;
+    }
 
     public void Add(Categoria entity)
     {

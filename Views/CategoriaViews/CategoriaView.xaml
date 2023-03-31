@@ -12,6 +12,18 @@
         <TextBlock Text="Nomina - Categorias" Foreground="MediumPurple"
                    DockPanel.Dock="Top" FontSize="26" TextAlignment="Center" Margin="0,40"/>
 
+        <UniformGrid DockPanel.Dock="Top" Columns="1">
+            <Border CornerRadius="10" Height="70" Background="#f4f4f4"
+                    Padding="20" Margin="10" VerticalAlignment="Top">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
+                           FontSize="24">
+                    <Run Text="Cantidad de empleados:"/>
+                    <Run Text="{Binding CantidadCategorias, Mode=OneWay}"
+                         Foreground="MediumPurple"/>
+                </TextBlock>
+            </Border>
+        </UniformGrid>
+
         <Button DockPanel.Dock="Top" Command="{Binding VerRegistrarCommand}"
                 Margin="10,0,0,0" Background="MediumPurple" Foreground="White"
                 BorderThickness="0" Height="55" Cursor="Hand" HorizontalAlignment="Left" Padding="10">
@@ -21,7 +33,7 @@
                 </StackPanel>
             </Button.Content>
         </Button>
-        <ScrollViewer>
+        <ScrollViewer Margin="0,15,0,0">
             <ItemsControl ItemsSource="{Binding Categorias}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

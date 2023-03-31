@@ -13,14 +13,19 @@ namespace Nomina.ViewModels;
 
 public class EmpleadoViewModel : IViewModel
 {
+    #region fields
     private ObservableCollection<Categoria> _categorias = new();
     private ObservableCollection<Empleado> _empleados = new();
-    private EmpleadoRepository _repository = new();
+    private EmpleadoRepository _repository;
     private Empleado _empleado = new();
     private Empleado? _empleadotemp;
     private Operacion _operacion;
     private string _error = string.Empty;
     private string _errores = string.Empty;
+    #endregion
+
+    #region properties
+    public Action<Categoria>? ActualizarCategoria { get; set; }
 
     public ObservableCollection<Empleado> Empleados
     {
@@ -72,7 +77,9 @@ public class EmpleadoViewModel : IViewModel
         get => _error;
         set { _error = value; Notificar(); }
     }
+    #endregion
 
+    #region Commands
     public ICommand VerRegistrarCommand { get; set; }
     public ICommand VerModificarCommand { get; set; }
     public ICommand VerEliminarCommand { get; set; }
@@ -81,12 +88,15 @@ public class EmpleadoViewModel : IViewModel
     public ICommand EliminarCommand { get; set; }
     public ICommand RegresarCommand { get; set; }
     public ICommand FiltrarCommand { get; set; }
+    #endregion
 
+    #region events
     public event PropertyChangedEventHandler? PropertyChanged;
-    public Action<Categoria>? ActualizarCategoria { get; set; }
+    #endregion
 
-    public EmpleadoViewModel()
+    public EmpleadoViewModel(NominaContext context)
     {
+        _repository = new(context);
         VerModificarCommand = new RelayCommand<int>(VerModificar);
         VerEliminarCommand = new RelayCommand<int>(VerEliminar);
         VerRegistrarCommand = new RelayCommand(VerRegistrar);
@@ -98,7 +108,7 @@ public class EmpleadoViewModel : IViewModel
         Actualizar();
     }
 
-
+    #region methods
     private void Filtrar(string pattern)
     {
         throw new NotImplementedException();
@@ -156,13 +166,12 @@ public class EmpleadoViewModel : IViewModel
 
     private void VerEliminar(int id)
     {
-        Operacion = Operacion.Delete;
         Empleado = _repository.GetById(id);
+        Operacion = Operacion.Delete;
     }
 
     private void VerModificar(int id)
     {
-        Operacion = Operacion.Update;
         Empleado = _repository.GetById(id);
         _empleadotemp = new Empleado()
         {
@@ -172,6 +181,7 @@ public class EmpleadoViewModel : IViewModel
             Activo = Empleado.Activo,
             IdCategoria = Empleado.IdCategoria
         };
+        Operacion = Operacion.Update;
     }
 
     public void Actualizar()
@@ -194,4 +204,5 @@ public class EmpleadoViewModel : IViewModel
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+    #endregion
 }

@@ -7,7 +7,7 @@
              xmlns:viewmodels="clr-namespace:Nomina.ViewModels"
              d:DataContext="{d:DesignInstance Type=viewmodels:EmpleadoViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="1080" d:DesignWidth="1920">
     <DockPanel>
         <TextBlock Text="Nomina - Empleados" Foreground="MediumPurple"
                    DockPanel.Dock="Top" FontSize="26" TextAlignment="Center" Margin="0,40"/>
@@ -51,7 +51,7 @@
                 </StackPanel>
             </Button.Content>
         </Button>
-        <ScrollViewer>
+        <ScrollViewer Margin="0,15,0,0">
             <ItemsControl ItemsSource="{Binding Empleados}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

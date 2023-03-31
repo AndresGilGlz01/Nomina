@@ -12,7 +12,7 @@ namespace Nomina.ViewModels;
 
 public class CategoriaViewModel : IViewModel
 {
-    readonly CategoriaRepository _repository = new();
+    readonly CategoriaRepository _repository;
     Operacion _operacion;
     ObservableCollection<Categoria> _categorias = new();
     string _errores = string.Empty;
@@ -30,6 +30,11 @@ public class CategoriaViewModel : IViewModel
     {
         get => _categoria;
         set { _categoria = value; Notificar(); }
+    }
+
+    public int CantidadCategorias
+    {
+        get => _categorias.Count;
     }
 
     public Operacion Operacion
@@ -50,6 +55,8 @@ public class CategoriaViewModel : IViewModel
         set { _errores = value; Notificar(); }
     }
 
+    public Action? ActualizarEmpleados { get; set; }
+
     public ICommand VerRegistrarCommand { get; set; }
     public ICommand VerModificarCommand { get; set; }
     public ICommand VerEliminarCommand { get; set; }
@@ -59,10 +66,10 @@ public class CategoriaViewModel : IViewModel
     public ICommand FiltrarCommand { get; set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-    public Action? ActualizarEmpleados { get; set; }
 
-    public CategoriaViewModel()
+    public CategoriaViewModel(NominaContext context)
     {
+        _repository = new(context);
         VerModificarCommand = new RelayCommand<int>(VerModificar);
         VerEliminarCommand = new RelayCommand<int>(VerEliminar);
         VerRegistrarCommand = new RelayCommand(VerRegistrar);

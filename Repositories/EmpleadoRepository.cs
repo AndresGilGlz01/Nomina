@@ -7,7 +7,12 @@ using System.Linq;
 namespace Nomina.Repositories;
 public class EmpleadoRepository : IRepository<Empleado>
 {
-    readonly NominaContext _context = MainViewModel.Context;
+    readonly NominaContext _context;
+
+    public EmpleadoRepository(NominaContext context)
+    {
+        _context = context;
+    }
 
     public void Add(Empleado entity)
     {
