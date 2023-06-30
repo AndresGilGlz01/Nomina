@@ -8,45 +8,41 @@ namespace Nomina.ViewModels;
 
 public class MainViewModel : INotifyPropertyChanged
 {
-    #region fields
-    private readonly CategoriaViewModel _categoriaviewmodel = new(Context);
-    private readonly EmpleadoViewModel _empleadoviewmodel = new(Context);
-    private IViewModel? _viewmodelactual;
-    #endregion
-
-    #region properties
-    public static NominaContext Context { get; set; } = new();
+    private readonly CategoriaViewModel _categoriaviewmodel;
+    private readonly EmpleadoViewModel _empleadoviewmodel;
+    private IViewModel _viewmodelactual;
+    private NominaContext _context;
 
     public IViewModel ViewModelActual
     {
-        get => _viewmodelactual ?? new EmpleadoViewModel(Context);
+        get => _viewmodelactual ?? new EmpleadoViewModel(_context);
         set {
             _viewmodelactual = value;
             _viewmodelactual.Actualizar();
             Notificar();
         }
     }
-    #endregion
 
-    #region commands
     public ICommand NavegarEmpleadoCommand { get; set; }
     public ICommand NavegarCategoriaCommand { get; set; }
-    #endregion
 
-    #region events
     public event PropertyChangedEventHandler? PropertyChanged;
-    #endregion
 
-    public MainViewModel()
+    public MainViewModel(NominaContext context)
     {
+        _context = context;
         NavegarEmpleadoCommand = new RelayCommand(NavegarEmpleado);
         NavegarCategoriaCommand = new RelayCommand(NavegarCategoria);
+
+        _categoriaviewmodel = new(_context);
+        _empleadoviewmodel = new(_context);
+
         ViewModelActual = _empleadoviewmodel;
+
         _categoriaviewmodel.ActualizarEmpleados = ActualizarEmpleados;
         _empleadoviewmodel.ActualizarCategoria = ActualizarCategoria;
     }
 
-    #region methods
     void NavegarCategoria()
     {
         ViewModelActual = _categoriaviewmodel;
@@ -64,7 +60,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     void ActualizarCategoria(Categoria entity)
     {
-        Context.Entry(entity).Reload();
+        _context.Entry(entity).Reload();
         _categoriaviewmodel.Actualizar();
     }
 
@@ -72,5 +68,4 @@ public class MainViewModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    #endregion
 }
